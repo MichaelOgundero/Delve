@@ -3,9 +3,19 @@ package com.sexybeast.michael.delve;
 public class Movie {
 
     private String name;
+    private String genre;
 
-    public Movie(String name) {
+    public Movie(String name, String genre) {
         this.name = name;
+        this.genre = genre;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getName() {

@@ -1,9 +1,14 @@
 package com.sexybeast.michael.delve;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,7 +16,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +28,45 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MovieAdapter movieAdapter;
     private List<Movie> movieList;
-
+    private DrawerLayout movieDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         initCollapsingToolbar();
+
+        //Actionbar
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        movieDrawerLayout = findViewById(R.id.drawer_layout);
+
+        //Navigation view
+        final NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                if(menuItem.getItemId() == R.id.about){
+                    movieDrawerLayout.closeDrawers();
+                    Toast.makeText(MainActivity.this, "Made by Michael AKA sexyBeast", Toast.LENGTH_LONG).show();
+                }
+                if(menuItem.getItemId() == R.id.mylist){
+                    switchActivity();
+                }
+                return true;
+            }
+        });
 
         movieList = new ArrayList<>();
         movieAdapter = new MovieAdapter(this, movieList);
 
+        //Recycler view
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(MainActivity.this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -43,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(movieAdapter);
 
         initialize();
+    }
+
+    public void switchActivity(){
+        Intent intent = new Intent(this, MyMovieList.class);
+        startActivity(intent);
     }
 
     private void initCollapsingToolbar() {
@@ -75,13 +112,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initialize() {
-        Movie a = new Movie("BvS");
+        Movie a = new Movie("BvS", "Comic Book");
         movieList.add(a);
 
-        a = new Movie("Man of Steel");
-        movieList.add(a);
-
-        a = new Movie("Man of Steel");
+        a = new Movie("Man of Steel", "Comic Book");
         movieList.add(a);
 
         movieAdapter.notifyDataSetChanged();
