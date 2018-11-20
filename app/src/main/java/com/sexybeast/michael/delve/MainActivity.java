@@ -1,7 +1,9 @@
 package com.sexybeast.michael.delve;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -17,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(menuItem.getItemId() == R.id.mylist){
                     switchActivity();
+                    movieDrawerLayout.closeDrawers();
                 }
                 return true;
             }
@@ -73,8 +77,26 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(movieAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Movie movie = movieList.get(position);
+                switchActivity(movie);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         initialize();
+    }
+
+    public void switchActivity(Movie movie){
+        Intent intent = new Intent(this, MovieInfoLayoutActivity.class);
+        intent.putExtra("Movie name", movie.getName());
+        startActivity(intent);
     }
 
     public void switchActivity(){
@@ -164,4 +186,5 @@ public class MainActivity extends AppCompatActivity {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+
 }

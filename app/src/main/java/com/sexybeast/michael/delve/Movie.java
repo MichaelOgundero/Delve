@@ -1,9 +1,20 @@
 package com.sexybeast.michael.delve;
 
-public class Movie {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
+
+public class Movie extends RealmObject {
+
+    @PrimaryKey
+    @Required
+    private String movieID;
 
     private String name;
     private String genre;
+
+
+    public Movie(){}
 
     public Movie(String name, String genre) {
         this.name = name;

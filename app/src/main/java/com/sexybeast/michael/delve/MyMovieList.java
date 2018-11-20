@@ -1,5 +1,6 @@
 package com.sexybeast.michael.delve;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -15,16 +16,25 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class MyMovieList extends AppCompatActivity {
     private static List<Movie> mymovielist = new ArrayList<>();
-    private RecyclerView recyclerView;
+    private static RecyclerView recyclerView;
     private static MyMovieListAdapter myMovieListAdapter;
+    private static Realm realm;
+    private static RealmConfiguration config;
+    private static Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +42,11 @@ public class MyMovieList extends AppCompatActivity {
         setContentView(R.layout.activity_mainmylist);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_fav);
-        myMovieListAdapter = new MyMovieListAdapter(mymovielist);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(myMovieListAdapter);
+
         swipeGesturetoDelete(recyclerView);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -48,16 +57,28 @@ public class MyMovieList extends AppCompatActivity {
             }
         });
 
+        //setting up realm
+        Realm.init(this);
+        config = new RealmConfiguration.Builder()
+                .name("movieListRealm.realm")
+                .build();
+        realm = Realm.getInstance(config);
 
+        //retrieve
+        RealmHelper helper = new RealmHelper(realm);
+        mymovielist = helper.retrieve();
 
-        initialize();
-    }
+        myMovieListAdapter = new MyMovieListAdapter(mymovielist);
+        recyclerView.setAdapter(myMovieListAdapter);
+        context = this;
 
-    private void initialize() {
-        Movie a = new Movie("Aquaman", "ComicBook");
-        mymovielist.add(a);
+ }
 
-        myMovieListAdapter.notifyDataSetChanged();
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Realm.getInstance(config).close();
     }
 
     public void openDialog(){
@@ -66,10 +87,26 @@ public class MyMovieList extends AppCompatActivity {
 
     }
 
-    public static void addMovie(TextView movieName, TextView movieGenre){
-        Movie movie = new Movie(movieName.getText().toString(), movieGenre.getText().toString());
+    public static void addMovie(TextView movieName, Spinner movieGenre){
+        Realm.getInstance(config).beginTransaction();
+        Movie movie = Realm.getInstance(config).createObject(Movie.class, UUID.randomUUID().toString());
+        movie.setName(movieName.getText().toString());
+        movie.setGenre(movieGenre.getSelectedItem().toString());
+
+        Realm.getInstance(config).commitTransaction();
         mymovielist.add(movie);
+
+        //save
+        RealmHelper helper = new RealmHelper(realm);
+        helper.save(movie);
+
+        //refresh
+        mymovielist = helper.retrieve();
+        myMovieListAdapter = new MyMovieListAdapter(mymovielist);
+        recyclerView.setAdapter(MyMovieList.myMovieListAdapter);
         myMovieListAdapter.notifyDataSetChanged();
+
+        Toast.makeText(MyMovieList.context, movie.getName() + " Added!", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -83,7 +120,10 @@ public class MyMovieList extends AppCompatActivity {
             @Override
             public void onSwiped( RecyclerView.ViewHolder viewHolder, int i) {
                 int position = viewHolder.getAdapterPosition();
-                Toast.makeText(MyMovieList.this, mymovielist.get(position).getName() + " Deleted!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MyMovieList.this, mymovielist.get(position).getName() + " Deleted!", Toast.LENGTH_SHORT).show();
+                Realm.getInstance(config).beginTransaction();
+                mymovielist.get(position).deleteFromRealm();
+                Realm.getInstance(config).commitTransaction();
                 mymovielist.remove(position);
                 myMovieListAdapter.notifyDataSetChanged();
 

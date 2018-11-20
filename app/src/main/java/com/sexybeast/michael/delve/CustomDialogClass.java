@@ -7,15 +7,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomDialogClass extends Dialog implements View.OnClickListener {
 
     public Activity activity;
     public Dialog dialog;
     public Button btn_add, btn_cancel;
-    public TextView movieName, movieGenre;
+    public TextView movieName;
+    public Spinner movieGenre;
 
 
     public CustomDialogClass(Activity activity) {
@@ -30,8 +36,18 @@ public class CustomDialogClass extends Dialog implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_dialog);
 
+        Spinner spinner = (Spinner) findViewById(R.id.movieGenre);
+
+        List<String> movieGenres = new ArrayList<String>();
+        movieGenres.add("Comic Book");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, movieGenres);
+        spinner.setAdapter(dataAdapter);
+
         movieName = (TextView) findViewById(R.id.movieName);
-        movieGenre = (TextView) findViewById(R.id.movieGenre);
+        movieGenre = (Spinner) findViewById(R.id.movieGenre);
+
+
 
         btn_add = (Button) findViewById(R.id.btn_add);
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
