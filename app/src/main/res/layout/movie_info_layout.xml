@@ -1,24 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".MovieInfoLayoutActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="275dp"
-        android:layout_height="116dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginLeft="68dp"
-        android:layout_marginTop="77dp"
-        android:text="TextView" />
-
-    <com.google.android.youtube.player.YouTubePlayerView
-        android:id="@+id/youtube_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimaryDark">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/poster"
+            android:layout_width="250dp"
+            android:layout_height="400dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="80dp"
+            android:layout_marginBottom="10dp"
+            android:src="@android:drawable/screen_background_dark_transparent" />
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/poster"
+            android:layout_margin="0dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="@color/textColor"
+                android:textSize="32sp"
+                android:fontFamily="sans-serif-condensed"/>
+
+            <TextView
+                android:id="@+id/release"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_marginTop="0dp"
+
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="20sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_below="@id/RelativeLayout1">
+
+            <TextView
+                android:id="@+id/genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="12sp"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/RelativeLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_below="@id/RelativeLayout2">
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+
+                android:textAllCaps="false"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="15sp"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_below="@id/RelativeLayout3">
+
+            <com.google.android.youtube.player.YouTubePlayerView
+                android:id="@+id/youtube_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"/>
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+</ScrollView>

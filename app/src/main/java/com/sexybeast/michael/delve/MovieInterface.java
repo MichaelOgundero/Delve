@@ -1,6 +1,7 @@
 package com.sexybeast.michael.delve;
 
 import com.sexybeast.michael.delve.model.Example;
+import com.sexybeast.michael.delve.modelTrailer.ExampleTrailer;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -10,29 +11,35 @@ public interface MovieInterface {
 
     String BASE_URL = "https://api.themoviedb.org/3/";
     String API_KEY = "623eeab48528051330ddc3ca73959483";
-    String moviename = "550";
-    @GET("movie/"+moviename)
+    String manofsteel = "49521";
+    String catchmeifyoucan = "640";
+    String SeriesOF = "11774";
+    String GotG = "118340";
+
+    @GET("search/movie")
     Call<Example> getMovieSearch(
-                @Query("api_key") String Key
-               );
+                    @Query("api_key") String Key,
+                    @Query("query") String movie
+            );
 
             //for trailer
-    @GET("movie/"+moviename+"/videos")
-    Call<Example> getTrailer(
+    @GET("movie/"+manofsteel+"/videos")
+    Call<ExampleTrailer> getManofSteel(
             @Query("api_key") String Key);
+
+    @GET("movie/"+catchmeifyoucan+"/videos")
+    Call<ExampleTrailer> getCatchME(
+            @Query("api_key") String Key);
+
+
+    @GET("movie/"+SeriesOF+"/videos")
+    Call<ExampleTrailer> getSeriesOF(
+            @Query("api_key") String Key);
+
+    @GET("movie/"+GotG+"/videos")
+    Call<ExampleTrailer> getGotG(
+            @Query("api_key") String Key);
+
 }
 
-//    @Query("include_adult") String value,
-//    @Query("language") String language,
-//    @Query("api_key") String Key,
-//    @Query("query") String moviename);
 
-//using GET/movie/movieID
-//    @GET("movie/550")
-//    Call<Example> getMovie(
-//            @Query("api_key") String Key);
-////
-//        //for trailer
-//    @GET("movie/550/videos")
-//    Call<Example> getTrailer(
-//            @Query("api_key") String Key);

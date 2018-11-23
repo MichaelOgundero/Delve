@@ -1,128 +1,165 @@
 package com.sexybeast.michael.delve.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
-
-import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-
-import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Result {
 
+    @SerializedName("vote_count")
+    @Expose
+    private Integer voteCount;
     @SerializedName("id")
     @Expose
-    private String id;
-    @SerializedName("iso_639_1")
+    private Integer id;
+    @SerializedName("video")
     @Expose
-    private String iso6391;
-    @SerializedName("iso_3166_1")
+    private Boolean video;
+    @SerializedName("vote_average")
     @Expose
-    private String iso31661;
-    @SerializedName("key")
+    private Double voteAverage;
+    @SerializedName("title")
     @Expose
-    private String key;
-    @SerializedName("name")
+    private String title;
+    @SerializedName("popularity")
     @Expose
-    private String name;
-    @SerializedName("site")
+    private Double popularity;
+    @SerializedName("poster_path")
     @Expose
-    private String site;
-    @SerializedName("size")
+    private String posterPath;
+    @SerializedName("original_language")
     @Expose
-    private Integer size;
-    @SerializedName("type")
+    private String originalLanguage;
+    @SerializedName("original_title")
     @Expose
-    private String type;
+    private String originalTitle;
+    @SerializedName("genre_ids")
+    @Expose
+    private List<Integer> genreIds = new ArrayList<Integer>();
+    @SerializedName("backdrop_path")
+    @Expose
+    private String backdropPath;
+    @SerializedName("adult")
+    @Expose
+    private Boolean adult;
+    @SerializedName("overview")
+    @Expose
+    private String overview;
+    @SerializedName("release_date")
+    @Expose
+    private String releaseDate;
 
-    public String getId() {
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getIso6391() {
-        return iso6391;
+    public Boolean getVideo() {
+        return video;
     }
 
-    public void setIso6391(String iso6391) {
-        this.iso6391 = iso6391;
+    public void setVideo(Boolean video) {
+        this.video = video;
     }
 
-    public String getIso31661() {
-        return iso31661;
+    public Double getVoteAverage() {
+        return voteAverage;
     }
 
-    public void setIso31661(String iso31661) {
-        this.iso31661 = iso31661;
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
-    public String getKey() {
-        return key;
+    public String getTitle() {
+        return title;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getName() {
-        return name;
+    public Double getPopularity() {
+        return popularity;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPopularity(Double popularity) {
+        this.popularity = popularity;
     }
 
-    public String getSite() {
-        return site;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setSite(String site) {
-        this.site = site;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
-    public Integer getSize() {
-        return size;
+    public String getOriginalLanguage() {
+        return originalLanguage;
     }
 
-    public void setSize(Integer size) {
-        this.size = size;
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 
-    public String getType() {
-        return type;
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
+    }
+
+    public List<Integer> getGenreIds() {
+        return genreIds;
+    }
+
+    public void setGenreIds(List<Integer> genreIds) {
+        this.genreIds = genreIds;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public Boolean getAdult() {
+        return adult;
+    }
+
+    public void setAdult(Boolean adult) {
+        this.adult = adult;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
 }

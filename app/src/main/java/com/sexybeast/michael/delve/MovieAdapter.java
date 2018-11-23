@@ -9,7 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.sexybeast.michael.delve.model.Example;
+
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder> {
@@ -42,9 +51,28 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     }
 
     @Override
-    public void onBindViewHolder( MyViewHolder holder, int position) {
-        Movie movie = movieList.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        final Movie movie = movieList.get(position);
         holder.name.setText(movie.getName());
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MovieInterface.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final MovieInterface movieInterface = retrofit.create(MovieInterface.class);
+        Call<Example> callXXX = movieInterface.getMovieSearch(MovieInterface.API_KEY, movie.getName());
+        callXXX.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Call<Example> call, Response<Example> response) {
+                String poster = response.body().getResults().get(0).getPosterPath();
+                Glide.with(context).load("http://image.tmdb.org/t/p/original"+poster).into(holder.thumbnail);
+            }
+
+            @Override
+            public void onFailure(Call<Example> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

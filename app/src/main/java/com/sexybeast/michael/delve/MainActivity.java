@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -21,7 +22,10 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         movieList = new ArrayList<>();
         movieAdapter = new MovieAdapter(this, movieList);
+
 
         //Recycler view
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -134,10 +139,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initialize() {
-        Movie a = new Movie("BvS", "Comic Book");
+        Movie a = new Movie("Man of Steel", "asd");
         movieList.add(a);
 
-        a = new Movie("Man of Steel", "Comic Book");
+        a = new Movie("Catch Me If You Can", "asd");
+        movieList.add(a);
+
+        a = new Movie("Lemony Snicket's A Series of Unfortunate Events", "asd");
+        movieList.add(a);
+
+        a = new Movie("Guardians of The Galaxy", "asd");
         movieList.add(a);
 
         movieAdapter.notifyDataSetChanged();
