@@ -139,16 +139,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initialize() {
-        Movie a = new Movie("Man of Steel", "asd");
+        Movie a = new Movie("Man of Steel");
         movieList.add(a);
 
-        a = new Movie("Catch Me If You Can", "asd");
+        a = new Movie("Catch Me If You Can");
         movieList.add(a);
 
-        a = new Movie("Lemony Snicket's A Series of Unfortunate Events", "asd");
+        a = new Movie("Lemony Snicket's A Series of Unfortunate Events");
         movieList.add(a);
 
-        a = new Movie("Guardians of The Galaxy", "asd");
+        a = new Movie("Guardians of The Galaxy");
         movieList.add(a);
 
         movieAdapter.notifyDataSetChanged();

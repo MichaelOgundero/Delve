@@ -12,5 +12,5 @@
     <item
         android:id="@+id/mylist"
         android:icon="@drawable/mymovieicon"
-        android:title="My Movie List" />
+        android:title="Watchlist" />
 </menu>

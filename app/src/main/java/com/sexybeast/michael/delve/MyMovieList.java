@@ -34,6 +34,7 @@ public class MyMovieList extends AppCompatActivity {
     private static Realm realm;
     private static RealmConfiguration config;
     private static Context context;
+    private static TextView movieCount;
 
 
     @Override
@@ -41,14 +42,15 @@ public class MyMovieList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmylist);
 
+        //recyclerview
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_fav);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-
         swipeGesturetoDelete(recyclerView);
 
+        //floating action botton
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +62,7 @@ public class MyMovieList extends AppCompatActivity {
         //setting up realm
         Realm.init(this);
         config = new RealmConfiguration.Builder()
-                .name("movieListRealm.realm")
+                .name("movieList.realm")
                 .build();
         realm = Realm.getInstance(config);
 
@@ -68,9 +70,14 @@ public class MyMovieList extends AppCompatActivity {
         RealmHelper helper = new RealmHelper(realm);
         mymovielist = helper.retrieve();
 
-        myMovieListAdapter = new MyMovieListAdapter(mymovielist);
+        myMovieListAdapter = new MyMovieListAdapter(mymovielist, this);
         recyclerView.setAdapter(myMovieListAdapter);
         context = this;
+
+        //moviecount
+        movieCount = (TextView) findViewById(R.id.movieCount);
+        movieCount.setText("("+mymovielist.size()+")");
+
 
  }
 
@@ -87,11 +94,11 @@ public class MyMovieList extends AppCompatActivity {
 
     }
 
-    public static void addMovie(TextView movieName, Spinner movieGenre){
+    public static void addMovie(TextView movieName){
         Realm.getInstance(config).beginTransaction();
         Movie movie = Realm.getInstance(config).createObject(Movie.class, UUID.randomUUID().toString());
         movie.setName(movieName.getText().toString());
-        movie.setGenre(movieGenre.getSelectedItem().toString());
+//        movie.setGenre(movieGenre.getSelectedItem().toString());
 
         Realm.getInstance(config).commitTransaction();
         mymovielist.add(movie);
@@ -102,11 +109,13 @@ public class MyMovieList extends AppCompatActivity {
 
         //refresh
         mymovielist = helper.retrieve();
-        myMovieListAdapter = new MyMovieListAdapter(mymovielist);
+        myMovieListAdapter = new MyMovieListAdapter(mymovielist, context);
         recyclerView.setAdapter(MyMovieList.myMovieListAdapter);
         myMovieListAdapter.notifyDataSetChanged();
 
         Toast.makeText(MyMovieList.context, movie.getName() + " Added!", Toast.LENGTH_SHORT).show();
+
+        movieCount.setText("("+mymovielist.size()+")");
     }
 
 
@@ -126,7 +135,7 @@ public class MyMovieList extends AppCompatActivity {
                 Realm.getInstance(config).commitTransaction();
                 mymovielist.remove(position);
                 myMovieListAdapter.notifyDataSetChanged();
-
+                movieCount.setText("("+mymovielist.size()+")");
 
             }
 

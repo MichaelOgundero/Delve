@@ -3,10 +3,14 @@ package com.sexybeast.michael.delve;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -28,7 +32,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
-        public ImageView thumbnail;
+        public ImageView thumbnail, overflow;
         public MyViewHolder( View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.name);
@@ -73,11 +77,44 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
             }
         });
+
+//        holder.overflow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//               showPopupMenu(holder.overflow);
+//            }
+//        });
     }
+
+//    //for pop up menu when you touch the overflow icon
+//    private void showPopupMenu(View view){
+//        PopupMenu popupMenu = new PopupMenu(context, view);
+//        MenuInflater inflater = popupMenu.getMenuInflater();
+//        inflater.inflate(R.menu.overflow_menu, popupMenu.getMenu());
+//        popupMenu.setOnMenuItemClickListener(new MyMenuItemClickListener());
+//        popupMenu.show();
+//    }
+//
+//    private class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+//        public MyMenuItemClickListener(){}
+//
+//        @Override
+//        public boolean onMenuItemClick(MenuItem menuItem) {
+//            switch (menuItem.getItemId()){
+//                case R.id.action_add_to_watchlist:
+//
+//                    Toast.makeText(context, "Add to watchlist", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                default:
+//            }
+//            return false;
+//        }
+//    }
 
     @Override
     public int getItemCount() {
        return movieList.size();
     }
+
 
 }

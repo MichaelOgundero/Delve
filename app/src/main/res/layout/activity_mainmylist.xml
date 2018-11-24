@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:id = "@+id/activity_mainmylist"
     android:layout_height="match_parent"
+    android:scrollbars="vertical"
     tools:context=".MyMovieList">
 
 
@@ -12,11 +13,9 @@
         android:id="@+id/recycler_view_fav"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="8dp"
+
         android:scrollbars="vertical"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
     <android.support.design.widget.FloatingActionButton
@@ -58,13 +57,27 @@
             android:layout_marginStart="6dp"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="18dp"
-            android:text="MY MOVIE LIST"
-            android:textColor="#ffff00"
+            android:text="WATCHLIST"
+            android:textColor="@color/textColor"
             android:textSize="30sp"
             android:textStyle="bold"
             android:typeface="serif"
             app:fontFamily="serif"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/movieCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="195dp"
+            android:layout_marginLeft="195dp"
+            android:layout_marginTop="18dp"
+            android:textColor="@color/textColor"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:typeface="serif"
+            app:fontFamily="serif"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>

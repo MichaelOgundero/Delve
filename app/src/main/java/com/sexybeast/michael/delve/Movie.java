@@ -28,17 +28,13 @@ public class Movie extends RealmObject {
     private String movieID;
 
     private String name;
-    private String genre;
     static String poster ;
 
 
     public Movie(){ }
 
-    public Movie(String name, String genre) {
+    public Movie(String name) {
         this.name = name;
-        this.genre = genre;
-
-
     }
 
     public String getName() {
@@ -53,14 +49,5 @@ public class Movie extends RealmObject {
 
         this.name = name;
     }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
 
 }

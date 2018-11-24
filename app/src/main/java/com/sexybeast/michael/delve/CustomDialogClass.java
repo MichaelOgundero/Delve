@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -21,7 +22,6 @@ public class CustomDialogClass extends Dialog implements View.OnClickListener {
     public Dialog dialog;
     public Button btn_add, btn_cancel;
     public TextView movieName;
-    public Spinner movieGenre;
 
 
     public CustomDialogClass(Activity activity) {
@@ -36,18 +36,7 @@ public class CustomDialogClass extends Dialog implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_dialog);
 
-        Spinner spinner = (Spinner) findViewById(R.id.movieGenre);
-
-        List<String> movieGenres = new ArrayList<String>();
-        movieGenres.add("Comic Book");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, movieGenres);
-        spinner.setAdapter(dataAdapter);
-
         movieName = (TextView) findViewById(R.id.movieName);
-        movieGenre = (Spinner) findViewById(R.id.movieGenre);
-
-
 
         btn_add = (Button) findViewById(R.id.btn_add);
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
@@ -60,8 +49,12 @@ public class CustomDialogClass extends Dialog implements View.OnClickListener {
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.btn_add:
-                MyMovieList.addMovie(movieName, movieGenre);
-                dismiss();
+                if(TextUtils.isEmpty(movieName.getText().toString())){
+                    movieName.setError("Please enter a movie name");
+                }else {
+                    MyMovieList.addMovie(movieName);
+                    dismiss();
+                }
                 break;
             case R.id.btn_cancel:
                 dismiss();
