@@ -11,6 +11,7 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
+import com.sexybeast.michael.delve.Model_ID.Example_ID;
 import com.sexybeast.michael.delve.model.Example;
 
 import com.sexybeast.michael.delve.modelTrailer.ExampleTrailer;
@@ -43,7 +44,7 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
 
 
         intent = getIntent();
-        String moviename = intent.getExtras().getString("Movie name");
+        String movieID = intent.getExtras().getString("Movie id");
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MovieInterface.BASE_URL)
@@ -51,98 +52,75 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
                 .build();
 
         final MovieInterface movieInterface = retrofit.create(MovieInterface.class);
-        Call<Example> callXXX = movieInterface.getMovieSearch(MovieInterface.API_KEY, intent.getExtras().getString("Movie name"));
-        callXXX.enqueue(new Callback<Example>() {
+        Call<Example_ID> callUSD = movieInterface.getMovieDetails("movie/"+movieID+"?api_key=623eeab48528051330ddc3ca73959483");
+        callUSD.enqueue(new Callback<Example_ID>() {
+
             TextView movieTitle = (TextView) findViewById(R.id.title);
             TextView movieRelease = (TextView) findViewById(R.id.release);
             TextView movieGenres = (TextView) findViewById(R.id.genres);
             TextView movieDescription = (TextView) findViewById(R.id.description);
             ImageView moviePoster = (ImageView) findViewById(R.id.poster);
+
             @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-                String poster = response.body().getResults().get(0).getPosterPath();
-                Glide.with(MovieInfoLayoutActivity.this).load("http://image.tmdb.org/t/p/original"+poster).into(moviePoster);
+            public void onResponse(Call<Example_ID> call, Response<Example_ID> response) {
+                if(response.isSuccessful()){
+                    //movie name
+                    movieTitle.setText(response.body().getTitle());
 
-                movieTitle.setText(response.body().getResults().get(0).getTitle());
+                    //movie year
+                    String[] year = response.body().getReleaseDate().split("-");
+                    movieRelease.setText("("+  year[0] + ")");
 
-                String[] year = response.body().getResults().get(0).getReleaseDate().split("-");
-                movieRelease.setText("("+  year[0] + ")");
-
-                StringBuilder stringBuilder = new StringBuilder();
-                boolean appendSeparator = false;
-                for(int i=0 ; i<response.body().getResults().get(0).getGenreIds().size();i++){
+                    //movie genres
+                    StringBuilder stringBuilder = new StringBuilder();
+                    boolean appendSeparator = false;
+                    for(int i=0 ; i<response.body().getGenres().size();i++){
                         if(appendSeparator)
                             stringBuilder.append(" | ");
                         appendSeparator = true;
 
-                        stringBuilder.append(movieGenre(response.body().getResults().get(0).getGenreIds().get(i)));
+                        stringBuilder.append(response.body().getGenres().get(i).getName());
+                     }
+                    movieGenres.setText(stringBuilder.toString());
+
+                    //movie description
+                    movieDescription.setText(response.body().getOverview());
+
+                    //movie poster
+                    String poster = response.body().getPosterPath();
+                     Glide.with(MovieInfoLayoutActivity.this).load("http://image.tmdb.org/t/p/original"+poster).into(moviePoster);
+
                 }
-                movieGenres.setText(stringBuilder.toString());
-                movieDescription.setText(response.body().getResults().get(0).getOverview());
             }
+
             @Override
-            public void onFailure(Call<Example> call, Throwable t) {
+            public void onFailure(Call<Example_ID> call, Throwable t) {
 
             }
         });
 
+
      ////////////////////////////////////////////////////////////////
-        if(moviename.equals("Man of Steel")) {
-            Call<ExampleTrailer> callasd = movieInterface.getManofSteel(MovieInterface.API_KEY);
+
+            Call<ExampleTrailer> callasd = movieInterface.getMovieTrailer("movie/"+movieID+"/videos?api_key=623eeab48528051330ddc3ca73959483");
             System.out.println(callasd.request().toString());
             callasd.enqueue(new Callback<ExampleTrailer>() {
                 @Override
                 public void onResponse(Call<ExampleTrailer> call, Response<ExampleTrailer> response) {
-
-                    videoKey.cueVideo(response.body().getResults().get(0).getKey());
-
+                    if(response.isSuccessful()) {
+                        if(response.body().getResults().size() == 0) {
+                        }else{
+                            videoKey.cueVideo(response.body().getResults().get(0).getKey());
+                        }
+                    }
                 }
-
                 @Override
                 public void onFailure(Call<ExampleTrailer> call, Throwable t) {
 
                 }
             });
-        } if(moviename.equals("Catch Me If You Can")){
-            Call<ExampleTrailer> callasd = movieInterface.getCatchME(MovieInterface.API_KEY);
-            System.out.println(callasd.request().toString());
-            callasd.enqueue(new Callback<ExampleTrailer>() {
-                @Override
-                public void onResponse(Call<ExampleTrailer> call, Response<ExampleTrailer> response) {
-                    videoKey.cueVideo(response.body().getResults().get(0).getKey());
-                }
-                @Override
-                public void onFailure(Call<ExampleTrailer> call, Throwable t) {
-                }
-            });
-        }
-        if(moviename.equals("Lemony Snicket's A Series of Unfortunate Events")){
-            Call<ExampleTrailer> callasd = movieInterface.getSeriesOF(MovieInterface.API_KEY);
-            System.out.println(callasd.request().toString());
-            callasd.enqueue(new Callback<ExampleTrailer>() {
-                @Override
-                public void onResponse(Call<ExampleTrailer> call, Response<ExampleTrailer> response) {
-                    videoKey.cueVideo(response.body().getResults().get(0).getKey());
-                }
-                @Override
-                public void onFailure(Call<ExampleTrailer> call, Throwable t) {
-                }
-            });
-        }
-        if(moviename.equals("Guardians of The Galaxy")){
-            Call<ExampleTrailer> callasd = movieInterface.getGotG(MovieInterface.API_KEY);
-            System.out.println(callasd.request().toString());
-            callasd.enqueue(new Callback<ExampleTrailer>() {
-                @Override
-                public void onResponse(Call<ExampleTrailer> call, Response<ExampleTrailer> response) {
-                    videoKey.cueVideo(response.body().getResults().get(0).getKey());
-                }
-                @Override
-                public void onFailure(Call<ExampleTrailer> call, Throwable t) {
-                }
-            });
-        }
 
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.sexybeast.michael.delve.Model_ID.Example_ID;
 import com.sexybeast.michael.delve.model.Example;
 
 import java.util.ArrayList;
@@ -30,14 +31,12 @@ private List<Movie> mymoviesList;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, genre, year;
         public ImageView moviePoster;
-        public CheckBox checkBox;
         public MyViewHolder( View itemView) {
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.title);
             genre = (TextView) itemView.findViewById(R.id.genre);
             year = (TextView) itemView.findViewById(R.id.year);
-            checkBox = (CheckBox) itemView.findViewById(R.id.checkbox);
             moviePoster = (ImageView) itemView.findViewById(R.id.moviePoster);
 
         }
@@ -58,126 +57,56 @@ private List<Movie> mymoviesList;
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Movie movie  = mymoviesList.get(position);
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MovieInterface.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final MovieInterface movieInterface = retrofit.create(MovieInterface.class);
-        Call<Example> callXXX = movieInterface.getMovieSearch(MovieInterface.API_KEY, movie.getName());
-        callXXX.enqueue(new Callback<Example>() {
+        Call<Example_ID> callXXX = movieInterface.getMovieDetails("movie/"+movie.getTmdbID()+"?api_key=623eeab48528051330ddc3ca73959483");
+        callXXX.enqueue(new Callback<Example_ID>() {
             @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-                //movie poster
-                String poster = response.body().getResults().get(0).getPosterPath();
-                Glide.with(context).load("http://image.tmdb.org/t/p/original"+poster).into(holder.moviePoster);
+            public void onResponse(Call<Example_ID> call, Response<Example_ID> response) {
+                if (response.isSuccessful()) {
+                    //movie poster
+                    String poster = response.body().getPosterPath();
+                    Glide.with(context).load("http://image.tmdb.org/t/p/original" + poster).into(holder.moviePoster);
 
-                //movie name
-                holder.title.setText(response.body().getResults().get(0).getTitle());
+                    //movie name
+                    holder.title.setText(response.body().getTitle());
 
-                //movie genre
-                StringBuilder stringBuilder = new StringBuilder();
-                boolean appendSeparator = false;
-                for(int i=0 ; i<response.body().getResults().get(0).getGenreIds().size();i++){
-                    if(appendSeparator)
-                        stringBuilder.append(" | ");
-                    appendSeparator = true;
+                    //movie genre
+                    StringBuilder stringBuilder = new StringBuilder();
+                    boolean appendSeparator = false;
+                    for (int i = 0; i < response.body().getGenres().size(); i++) {
+                        if (appendSeparator)
+                            stringBuilder.append(" | ");
+                        appendSeparator = true;
 
-                    stringBuilder.append(movieGenre(response.body().getResults().get(0).getGenreIds().get(i)));
+                        stringBuilder.append(response.body().getGenres().get(i).getName());
+                    }
+                    holder.genre.setText(stringBuilder.toString());
+
+                    //movie year
+                    String[] year = response.body().getReleaseDate().split("-");
+                    holder.year.setText("(" + year[0] + ")");
+
                 }
-                holder.genre.setText(stringBuilder.toString());
-
-                //movie year
-                String[] year = response.body().getResults().get(0).getReleaseDate().split("-");
-                holder.year.setText("("+  year[0] + ")");
-
             }
 
             @Override
-            public void onFailure(Call<Example> call, Throwable t) {
+            public void onFailure(Call<Example_ID> call, Throwable t) {
 
             }
         });
 
-        //checkBox
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked){
-                    holder.title.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                }else{
-                    holder.title.setPaintFlags(0);
-                }
-            }
-        });
+
     }
 
     @Override
     public int getItemCount() {
        return mymoviesList.size();
     }
-
-    public String movieGenre(int id){
-        if(id == 28){
-            return "Action";
-        }
-        if(id == 12){
-            return "Adventure";
-        }
-        if(id == 16){
-            return "Animation";
-        }
-        if(id == 35){
-            return "Comedy";
-        }
-        if(id == 80){
-            return "Crime";
-        }
-        if(id == 99){
-            return "Documentary";
-        }
-        if(id == 18){
-            return "Drama";
-        }
-        if(id == 10751){
-            return "Family";
-        }
-        if(id == 14){
-            return "Fantasy";
-        }
-        if(id == 36){
-            return "History";
-        }
-        if(id == 27){
-            return "Horror";
-        }
-        if(id == 10402){
-            return "Music";
-        }
-        if(id == 9648){
-            return "Mystery";
-        }
-        if(id == 10749){
-            return "Romance";
-        }
-        if(id == 878){
-            return "Science Fiction";
-        }
-        if(id == 10770){
-            return "TV Movie";
-        }
-        if(id == 53){
-            return "Thriller";
-        }
-        if(id == 10752){
-            return "War";
-        }
-        if(id == 37){
-            return "Western";
-        }
-        else{
-            return "N/A";
-        }
-    }
-
 
 }

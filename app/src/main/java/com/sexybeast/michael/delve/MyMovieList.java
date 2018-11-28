@@ -1,6 +1,7 @@
 package com.sexybeast.michael.delve;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -8,14 +9,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,12 +40,16 @@ public class MyMovieList extends AppCompatActivity {
     private static RealmConfiguration config;
     private static Context context;
     private static TextView movieCount;
+    private TextView listStatus;
+    private ImageView listStatusIcon;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mainmylist);
+
 
         //recyclerview
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_fav);
@@ -50,36 +59,60 @@ public class MyMovieList extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         swipeGesturetoDelete(recyclerView);
 
-        //floating action botton
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDialog();
-            }
-        });
-
         //setting up realm
         Realm.init(this);
+
         config = new RealmConfiguration.Builder()
-                .name("movieList.realm")
+                .name("mymovieList.realm")
                 .build();
+
         realm = Realm.getInstance(config);
 
         //retrieve
         RealmHelper helper = new RealmHelper(realm);
         mymovielist = helper.retrieve();
 
-        myMovieListAdapter = new MyMovieListAdapter(mymovielist, this);
+
+        if (mymovielist.isEmpty() == true) {
+            listStatusIcon = (ImageView) findViewById(R.id.listStatusIcon);
+            listStatusIcon.setImageResource(R.drawable.emptylist);
+
+            listStatus = (TextView) findViewById(R.id.listStatus);
+            listStatus.setText("Your watchlist is empty hit back to add a movie");
+        } else if (mymovielist.isEmpty() == false) {
+           ImageView listStatusIcon = (ImageView) findViewById(R.id.listStatusIcon);
+            listStatusIcon.setAlpha(0);
+
+            listStatus = (TextView) findViewById(R.id.listStatus);
+            listStatus.setText("");
+        }
+
+
+        myMovieListAdapter = new MyMovieListAdapter(mymovielist, getApplicationContext());
         recyclerView.setAdapter(myMovieListAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Movie movie = mymovielist.get(position);
+                switchActivity(movie);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+
         context = this;
 
-        //moviecount
+//        //moviecount
         movieCount = (TextView) findViewById(R.id.movieCount);
-        movieCount.setText("("+mymovielist.size()+")");
+        movieCount.setText("(" + mymovielist.size() + ")");
 
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
 
- }
+    }
 
     @Override
     protected void onPause() {
@@ -88,38 +121,38 @@ public class MyMovieList extends AppCompatActivity {
         Realm.getInstance(config).close();
     }
 
-    public void openDialog(){
-        CustomDialogClass customDialogClass = new CustomDialogClass(this);
-        customDialogClass.show();
-
+    public void switchActivity(Movie movie) {
+        Intent intent = new Intent(this, MovieInfoLayoutActivity.class);
+        intent.putExtra("Movie id", movie.getTmdbID());
+        startActivity(intent);
     }
 
-    public static void addMovie(TextView movieName){
+
+    public static void addMovie(String movieID) {
+
         Realm.getInstance(config).beginTransaction();
-        Movie movie = Realm.getInstance(config).createObject(Movie.class, UUID.randomUUID().toString());
-        movie.setName(movieName.getText().toString());
-//        movie.setGenre(movieGenre.getSelectedItem().toString());
+        Movie movie = Realm.getInstance(MyMovieList.config).createObject(Movie.class, UUID.randomUUID().toString());
+        movie.setTmdbID(movieID);
+        Realm.getInstance(MyMovieList.config).commitTransaction();
+        MyMovieList.mymovielist.add(movie);
 
-        Realm.getInstance(config).commitTransaction();
-        mymovielist.add(movie);
 
-        //save
-        RealmHelper helper = new RealmHelper(realm);
+        // save
+        RealmHelper helper = new RealmHelper(MyMovieList.realm);
         helper.save(movie);
 
         //refresh
-        mymovielist = helper.retrieve();
-        myMovieListAdapter = new MyMovieListAdapter(mymovielist, context);
-        recyclerView.setAdapter(MyMovieList.myMovieListAdapter);
-        myMovieListAdapter.notifyDataSetChanged();
+        MyMovieList.mymovielist = helper.retrieve();
+        MyMovieList.myMovieListAdapter = new MyMovieListAdapter(MyMovieList.mymovielist, MyMovieList.context);
+        MyMovieList.recyclerView.setAdapter(MyMovieList.myMovieListAdapter);
+        MyMovieList.myMovieListAdapter.notifyDataSetChanged();
 
-        Toast.makeText(MyMovieList.context, movie.getName() + " Added!", Toast.LENGTH_SHORT).show();
 
-        movieCount.setText("("+mymovielist.size()+")");
+        movieCount.setText("(" + mymovielist.size() + ")");
     }
 
 
-    public void swipeGesturetoDelete(RecyclerView rv){
+    public void swipeGesturetoDelete(RecyclerView rv) {
         ItemTouchHelper.SimpleCallback simpleItemTouchCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
@@ -127,16 +160,25 @@ public class MyMovieList extends AppCompatActivity {
             }
 
             @Override
-            public void onSwiped( RecyclerView.ViewHolder viewHolder, int i) {
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int i) {
                 int position = viewHolder.getAdapterPosition();
-                Toast.makeText(MyMovieList.this, mymovielist.get(position).getName() + " Deleted!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MyMovieList.this, mymovielist.get(position).getName() + "Deleted",Toast.LENGTH_LONG).show();
                 Realm.getInstance(config).beginTransaction();
                 mymovielist.get(position).deleteFromRealm();
                 Realm.getInstance(config).commitTransaction();
                 mymovielist.remove(position);
                 myMovieListAdapter.notifyDataSetChanged();
-                movieCount.setText("("+mymovielist.size()+")");
+                movieCount.setText("(" + mymovielist.size() + ")");
 
+                if (mymovielist.isEmpty() == true) {
+                    listStatusIcon = (ImageView) findViewById(R.id.listStatusIcon);
+                    listStatusIcon.setImageResource(R.drawable.emptylist);
+                    listStatusIcon.setAlpha(225);
+
+                    listStatus = (TextView) findViewById(R.id.listStatus);
+                    listStatus.setText("Your watchlist is empty hit back to add a movie");
+
+                }
             }
 
             @Override
@@ -144,7 +186,7 @@ public class MyMovieList extends AppCompatActivity {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 View itemView = viewHolder.itemView;
                 final ColorDrawable background = new ColorDrawable(Color.RED);
-                background.setBounds(0, itemView.getTop(), (int) (itemView.getLeft()+dX), itemView.getBottom());
+                background.setBounds(0, itemView.getTop(), (int) (itemView.getLeft() + dX), itemView.getBottom());
                 background.draw(c);
 
             }

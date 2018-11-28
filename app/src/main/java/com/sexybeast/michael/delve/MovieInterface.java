@@ -1,11 +1,13 @@
 package com.sexybeast.michael.delve;
 
+import com.sexybeast.michael.delve.Model_ID.Example_ID;
 import com.sexybeast.michael.delve.model.Example;
 import com.sexybeast.michael.delve.modelTrailer.ExampleTrailer;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface MovieInterface {
 
@@ -22,23 +24,18 @@ public interface MovieInterface {
                     @Query("query") String movie
             );
 
-            //for trailer
-    @GET("movie/"+manofsteel+"/videos")
-    Call<ExampleTrailer> getManofSteel(
-            @Query("api_key") String Key);
+    //dynamic url////////////////////////////////////////////////////////////////////////////////////////
+    //movie details
+    @GET
+    Call<Example_ID> getMovieDetails(@Url String url);
 
-    @GET("movie/"+catchmeifyoucan+"/videos")
-    Call<ExampleTrailer> getCatchME(
-            @Query("api_key") String Key);
+    //trailers
+    @GET
+    Call<ExampleTrailer> getMovieTrailer(@Url String url);
 
-
-    @GET("movie/"+SeriesOF+"/videos")
-    Call<ExampleTrailer> getSeriesOF(
-            @Query("api_key") String Key);
-
-    @GET("movie/"+GotG+"/videos")
-    Call<ExampleTrailer> getGotG(
-            @Query("api_key") String Key);
+    //popular movies
+    @GET
+    Call<Example> getPopularMovies(@Url String url);
 
 }
 

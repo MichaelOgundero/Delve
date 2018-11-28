@@ -1,5 +1,4 @@
 package com.sexybeast.michael.delve.model;
-
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;

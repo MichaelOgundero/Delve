@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
+import com.sexybeast.michael.delve.Model_ID.Example_ID;
 import com.sexybeast.michael.delve.model.Example;
 
 import java.util.List;
@@ -57,23 +58,28 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Movie movie = movieList.get(position);
-        holder.name.setText(movie.getName());
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(MovieInterface.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         final MovieInterface movieInterface = retrofit.create(MovieInterface.class);
-        Call<Example> callXXX = movieInterface.getMovieSearch(MovieInterface.API_KEY, movie.getName());
-        callXXX.enqueue(new Callback<Example>() {
+        Call<Example_ID> callXXX = movieInterface.getMovieDetails("movie/"+movie.getTmdbID()+"?api_key=623eeab48528051330ddc3ca73959483");
+        callXXX.enqueue(new Callback<Example_ID>() {
             @Override
-            public void onResponse(Call<Example> call, Response<Example> response) {
-                String poster = response.body().getResults().get(0).getPosterPath();
-                Glide.with(context).load("http://image.tmdb.org/t/p/original"+poster).into(holder.thumbnail);
+            public void onResponse(Call<Example_ID> call, Response<Example_ID> response) {
+            if(response.isSuccessful()){
+                holder.name.setText(response.body().getTitle());
+
+                String poster = response.body().getPosterPath();
+                Glide.with(context).load("http://image.tmdb.org/t/p/original" + poster).into(holder.thumbnail);
+                movie.setName(response.body().getTitle());
+             }
             }
 
             @Override
-            public void onFailure(Call<Example> call, Throwable t) {
+            public void onFailure(Call<Example_ID> call, Throwable t) {
 
             }
         });

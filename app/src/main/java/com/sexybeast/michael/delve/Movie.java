@@ -27,27 +27,33 @@ public class Movie extends RealmObject {
     @Required
     private String movieID;
 
+
+
+
     private String name;
-    static String poster ;
+    private String tmdbID;
 
 
     public Movie(){ }
 
-    public Movie(String name) {
-        this.name = name;
+
+    public Movie(String tmdbID) {
+        this.tmdbID = tmdbID;
+    }
+
+    public String getTmdbID() {
+        return tmdbID;
+    }
+
+    public void setTmdbID(String tmdbID) {
+        this.tmdbID = tmdbID;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getPoster() {
-        return poster;
-    }
-
     public void setName(String name) {
-
         this.name = name;
     }
-
 }

@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -23,12 +24,22 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.sexybeast.michael.delve.Model_ID.Example_ID;
+import com.sexybeast.michael.delve.model.Example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
         initCollapsingToolbar();
 
         //Actionbar
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         movieDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -71,9 +82,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         movieList = new ArrayList<>();
         movieAdapter = new MovieAdapter(this, movieList);
-
 
         //Recycler view
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -91,16 +104,29 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
+                Movie movie = movieList.get(position);
+                MyMovieList.addMovie(movie.getTmdbID());
+                switchActivity();
+                Toast.makeText(MainActivity.this, movie.getName() + " Added!", Toast.LENGTH_LONG).show();
 
             }
         }));
 
         initialize();
+
+        overridePendingTransition(R.anim.slide_out, R.anim.slide_in);
+
+        startActivity(new Intent(this, MyMovieList.class));
+
+
+
+
+
     }
 
     public void switchActivity(Movie movie){
         Intent intent = new Intent(this, MovieInfoLayoutActivity.class);
-        intent.putExtra("Movie name", movie.getName());
+        intent.putExtra("Movie id", movie.getTmdbID());
         startActivity(intent);
     }
 
@@ -138,21 +164,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     private void initialize() {
-        Movie a = new Movie("Man of Steel");
-        movieList.add(a);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MovieInterface.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        a = new Movie("Catch Me If You Can");
-        movieList.add(a);
+            Random random = new Random();
+            int page = random.nextInt((10 - 1) + 1) + 1;
 
-        a = new Movie("Lemony Snicket's A Series of Unfortunate Events");
-        movieList.add(a);
+        final MovieInterface movieInterface = retrofit.create(MovieInterface.class);
+        Call<Example> callUSD = movieInterface.getPopularMovies("movie/popular?api_key=623eeab48528051330ddc3ca73959483&language=en-US&page="+page);
+        callUSD.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Call<Example> call, Response<Example> response) {
+                int resultSize = response.body().getResults().size();
+                if(response.isSuccessful()){
+                    for(int i=0;i<resultSize;i++){
+                        Movie movie = new Movie(String.valueOf(response.body().getResults().get(i).getId()));
+                        movieList.add(movie);
+                        movieAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Example> call, Throwable t) {
 
-        a = new Movie("Guardians of The Galaxy");
-        movieList.add(a);
+            }
+        });
 
-        movieAdapter.notifyDataSetChanged();
     }
+
 
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

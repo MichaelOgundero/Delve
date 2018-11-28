@@ -54,19 +54,5 @@
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp" />
 
-    <CheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/genre"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/moviePoster"
-        android:buttonTint="@color/colorPrimaryDark"
-        android:scaleX="1.30"
-        android:scaleY="1.30" />
-
-
-
-
 
 </RelativeLayout>
