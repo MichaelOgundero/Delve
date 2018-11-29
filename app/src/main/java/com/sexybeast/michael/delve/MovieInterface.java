@@ -2,6 +2,7 @@ package com.sexybeast.michael.delve;
 
 import com.sexybeast.michael.delve.Model_ID.Example_ID;
 import com.sexybeast.michael.delve.model.Example;
+import com.sexybeast.michael.delve.modelCrew.ExampleCrew;
 import com.sexybeast.michael.delve.modelTrailer.ExampleTrailer;
 
 import retrofit2.Call;
@@ -12,17 +13,7 @@ import retrofit2.http.Url;
 public interface MovieInterface {
 
     String BASE_URL = "https://api.themoviedb.org/3/";
-    String API_KEY = "623eeab48528051330ddc3ca73959483";
-    String manofsteel = "49521";
-    String catchmeifyoucan = "640";
-    String SeriesOF = "11774";
-    String GotG = "118340";
 
-    @GET("search/movie")
-    Call<Example> getMovieSearch(
-                    @Query("api_key") String Key,
-                    @Query("query") String movie
-            );
 
     //dynamic url////////////////////////////////////////////////////////////////////////////////////////
     //movie details
@@ -36,6 +27,10 @@ public interface MovieInterface {
     //popular movies
     @GET
     Call<Example> getPopularMovies(@Url String url);
+
+    //crew info
+    @GET
+    Call<ExampleCrew> getCrew(@Url String url);
 
 }
 

@@ -14,8 +14,11 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import com.sexybeast.michael.delve.Model_ID.Example_ID;
 import com.sexybeast.michael.delve.model.Example;
 
+import com.sexybeast.michael.delve.modelCrew.ExampleCrew;
 import com.sexybeast.michael.delve.modelTrailer.ExampleTrailer;
 import com.sexybeast.michael.delve.modelTrailer.ResultTrailer;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 
@@ -119,6 +122,47 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
 
                 }
             });
+
+    /////////////////////////////////////////////////////////////////////////
+    Call<ExampleCrew> callcrew = movieInterface.getCrew("movie/"+movieID+"/credits?api_key=623eeab48528051330ddc3ca73959483");
+    callcrew.enqueue(new Callback<ExampleCrew>() {
+        TextView movieDirector = (TextView) findViewById(R.id.director);
+        TextView movieCast = (TextView) findViewById(R.id.cast);
+        @Override
+        public void onResponse(Call<ExampleCrew> call, Response<ExampleCrew> response) {
+            if(response.isSuccessful()){
+
+                //movieDirector
+                ArrayList<String> director = new ArrayList<>();
+                for(int i=0; i<response.body().getCrew().size();i++){
+                    if(response.body().getCrew().get(i).getJob().equals("Director")){
+                        director.add(response.body().getCrew().get(i).getName());
+                    }
+                }
+                for(int i = 0; i<director.size();i++){
+                    movieDirector.setText(director.get(i));
+                }
+
+                //movie cast
+                StringBuilder stringBuilder = new StringBuilder();
+                boolean appendSeparator = false;
+                for(int i=0 ; i<response.body().getCast().size();i++){
+                    if(appendSeparator)
+                        stringBuilder.append("\n");
+                    appendSeparator = true;
+
+                    stringBuilder.append(response.body().getCast().get(i).getName() + ":  "+ response.body().getCast().get(i).getCharacter());
+                }
+                movieCast.setText(stringBuilder.toString());
+
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ExampleCrew> call, Throwable t) {
+
+        }
+    });
 
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }

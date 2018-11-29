@@ -118,6 +118,78 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/RelativeLayout5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_below="@id/RelativeLayout4">
+
+            <TextView
+                android:id="@+id/moredetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textAllCaps="true"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif-condensed"
+                android:text="More Details"
+                android:textSize="25sp"
+                />
+            <TextView
+                android:id="@+id/directorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/moredetail"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
+                android:text="Director:"
+                android:textSize="20dp"/>
+            <TextView
+                android:id="@+id/director"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/directorText"
+                android:layout_below="@id/moredetail"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"/>
+            <TextView
+                android:id="@+id/castText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/directorText"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"
+                android:text="Cast:"/>
+            <TextView
+                android:id="@+id/cast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/castText"
+                android:layout_below="@id/director"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"/>
+
+        </RelativeLayout>
+
 
 
 
