@@ -3,6 +3,7 @@ package com.sexybeast.michael.delve;
 import com.sexybeast.michael.delve.Model_ID.Example_ID;
 import com.sexybeast.michael.delve.model.Example;
 import com.sexybeast.michael.delve.modelCrew.ExampleCrew;
+import com.sexybeast.michael.delve.modelRatings.ExampleRatings;
 import com.sexybeast.michael.delve.modelTrailer.ExampleTrailer;
 
 import retrofit2.Call;
@@ -31,6 +32,10 @@ public interface MovieInterface {
     //crew info
     @GET
     Call<ExampleCrew> getCrew(@Url String url);
+
+    //get ratings
+    @GET
+    Call<ExampleRatings> getRatings(@Url String url);
 
 }
 

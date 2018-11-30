@@ -44,6 +44,8 @@
                 android:textSize="32sp"
                 android:fontFamily="sans-serif-condensed"/>
 
+
+
             <TextView
                 android:id="@+id/release"
                 android:layout_width="wrap_content"
@@ -77,9 +79,41 @@
                 android:textAllCaps="true"
                 android:textColor="@color/textColor2"
                 android:fontFamily="sans-serif"
-                android:textSize="12sp"
-                />
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/genres"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="left"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/runtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/genres"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/rating"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="15sp"/>
+
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/RelativeLayout3"
             android:layout_width="wrap_content"
@@ -129,7 +163,7 @@
                 android:id="@+id/moredetail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
                 android:textAllCaps="true"
@@ -138,6 +172,19 @@
                 android:text="More Details"
                 android:textSize="25sp"
                 />
+            <TextView
+                android:id="@+id/releaseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/moredetail"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="110dp"
+                android:gravity="right"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
+                android:textSize="25dp"/>
+
             <TextView
                 android:id="@+id/directorText"
                 android:layout_width="wrap_content"
@@ -148,7 +195,7 @@
                 android:gravity="left"
                 android:textColor="@color/textColor"
                 android:fontFamily="sans-serif"
-                android:text="Director:"
+                android:text="Director"
                 android:textSize="20dp"/>
             <TextView
                 android:id="@+id/director"
@@ -163,30 +210,129 @@
                 android:fontFamily="sans-serif"
                 android:textSize="20dp"/>
             <TextView
-                android:id="@+id/castText"
+                android:id="@+id/writerText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/directorText"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
                 android:textColor="@color/textColor"
                 android:fontFamily="sans-serif"
-                android:textSize="20dp"
-                android:text="Cast:"/>
+                android:textSize="20sp"
+                android:text="Writer(s)"/>
             <TextView
-                android:id="@+id/cast"
+                android:id="@+id/writers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/castText"
-                android:layout_below="@id/director"
+                android:layout_below="@id/writerText"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="left"
                 android:textColor="@color/textColor2"
                 android:fontFamily="sans-serif"
+                android:textSize="17dp"/>
+            <TextView
+                android:id="@+id/castText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/writers"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"
+                android:text="Cast"/>
+            <TextView
+                android:id="@+id/cast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/castText"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="17dp"/>
+            <TextView
+                android:id="@+id/budgetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cast"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"
+                android:text="Budget"/>
+            <TextView
+                android:id="@+id/budget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cast"
+                android:layout_toRightOf="@id/budgetText"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
                 android:textSize="20dp"/>
+            <TextView
+                android:id="@+id/revenueText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/budgetText"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"
+                android:text="Revenue"/>
+            <TextView
+                android:id="@+id/revenue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/budget"
+                android:layout_toRightOf="@id/revenueText"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"
+                android:text="Budget"/>
+            <TextView
+                android:id="@+id/ProductionCompanyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/revenue"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"
+                android:text="Production Company(s)"/>
+            <TextView
+                android:id="@+id/productioncompanies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ProductionCompanyText"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="left"
+                android:textColor="@color/textColor2"
+                android:fontFamily="sans-serif"
+                android:textSize="17dp"
+              />
+
+
 
         </RelativeLayout>
 
