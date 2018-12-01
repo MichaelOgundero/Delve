@@ -106,7 +106,11 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
                     Glide.with(MovieInfoLayoutActivity.this).load("http://image.tmdb.org/t/p/original" + poster).into(moviePoster);
 
                     //movie runtime
-                    movieRunTime.setText(response.body().getRuntime().toString() + " " + "min");
+                    if (response.body().getRuntime() == null) {
+                        movieRunTime.setText("N/A");
+                    } else {
+                        movieRunTime.setText(response.body().getRuntime().toString() + " " + "min");
+                    }
 
                     //budget revenue
                     movieBudget.setText("$" + response.body().getBudget().toString());
@@ -123,7 +127,7 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
                     //production companies
                     StringBuilder stringBuilder1 = new StringBuilder();
                     boolean appendSeparator1 = false;
-                    for (int i = 0; i < response.body().getProductionCompanies().size() ;i++) {
+                    for (int i = 0; i < response.body().getProductionCompanies().size(); i++) {
                         if (appendSeparator1)
                             stringBuilder1.append("\n");
                         appendSeparator1 = true;
@@ -131,7 +135,6 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
                         stringBuilder1.append(response.body().getProductionCompanies().get(i).getName());
                     }
                     movieProductionCompany.setText(stringBuilder1.toString());
-
 
 
                 }
@@ -258,8 +261,14 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
                 if (response.isSuccessful()) {
                     ArrayList<String> rating = new ArrayList<>();
                     for (int i = 0; i < response.body().getResults().size(); i++) {
-                        if (response.body().getResults().get(i).getIso31661().equals("US")) {
-                            rating.add(response.body().getResults().get(i).getReleaseDates().get(0).getCertification());
+                        if (response.body().getResults().get(i).getIso31661().equals("")) {
+                            rating.add("N/A");
+                        } else if (response.body().getResults().get(i).getIso31661().equals("US")) {
+                            if (response.body().getResults().get(i).getReleaseDates().get(0).getCertification().equals("")) {
+                                rating.add("N/A");
+                            } else {
+                                rating.add(response.body().getResults().get(i).getReleaseDates().get(0).getCertification());
+                            }
                         }
 
                     }
@@ -270,6 +279,9 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
                             movieRating.setText(rating.get(i));
                         } else if (rating.get(i).contains("PG")) {
                             movieRating.setTextColor(Color.GREEN);
+                            movieRating.setText(rating.get(i));
+                        } else {
+                            movieRating.setTextColor(Color.BLUE);
                             movieRating.setText(rating.get(i));
                         }
 
