@@ -60,7 +60,7 @@ public class MyMovieList extends AppCompatActivity {
         swipeGesturetoDelete(recyclerView);
 
         //setting up realm
-        Realm.init(this);
+        Realm.init(getApplicationContext());
 
         config = new RealmConfiguration.Builder()
                 .name("mymovieList.realm")

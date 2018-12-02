@@ -57,10 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         initCollapsingToolbar();
 
-        //Actionbar
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
         movieDrawerLayout = findViewById(R.id.drawer_layout);
 

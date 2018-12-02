@@ -54,7 +54,7 @@
                 android:layout_marginTop="0dp"
 
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:textAllCaps="true"
                 android:textColor="@color/textColor2"
                 android:fontFamily="sans-serif"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:gravity="center"
+                android:gravity="left"
                 android:textAllCaps="true"
                 android:textColor="@color/textColor2"
                 android:fontFamily="sans-serif"
@@ -149,6 +149,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"/>
+            <TextView
+                android:id="@+id/notAvailabe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:fontFamily="sans-serif-condensed"
+                android:textSize="10sp"/>
 
         </RelativeLayout>
 

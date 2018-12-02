@@ -99,7 +99,11 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
                     movieGenres.setText(stringBuilder.toString());
 
                     //movie description
-                    movieDescription.setText(response.body().getOverview());
+                    if (response.body().getOverview().equals("")) {
+                        movieDescription.setText("N/A");
+                    } else {
+                        movieDescription.setText(response.body().getOverview());
+                    }
 
                     //movie poster
                     String poster = response.body().getPosterPath();
@@ -152,10 +156,15 @@ public class MovieInfoLayoutActivity extends YouTubeBaseActivity implements
         Call<ExampleTrailer> callasd = movieInterface.getMovieTrailer("movie/" + movieID + "/videos?api_key=623eeab48528051330ddc3ca73959483");
         System.out.println(callasd.request().toString());
         callasd.enqueue(new Callback<ExampleTrailer>() {
+
             @Override
             public void onResponse(Call<ExampleTrailer> call, Response<ExampleTrailer> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getResults().size() == 0) {
+                        TextView vidNotAvailable = (TextView) findViewById(R.id.notAvailabe);
+                        vidNotAvailable.setTextColor(Color.RED);
+                        vidNotAvailable.setText("Video key not provided");
+
                     } else {
                         videoKey.cueVideo(response.body().getResults().get(0).getKey());
                     }
